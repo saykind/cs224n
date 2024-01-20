@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e0de46a6-4697-462f-9b71-df08810224b9" name="Changes" comment="Added assignment 2.">
-      <change afterPath="$PROJECT_DIR$/pytorch_tutorial/CS224N_PyTorch_Tutorial.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/cs224n.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cs224n.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a2/env.yml" beforeDir="false" afterPath="$PROJECT_DIR$/a2/env.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pytorch_tutorial/CS224N_PyTorch_Tutorial.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/pytorch_tutorial/CS224N_PyTorch_Tutorial.ipynb" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +45,7 @@
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -59,7 +59,6 @@
   <component name="RunManager">
     <configuration name="test" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="cs224n" />
-      <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -104,6 +103,8 @@
       <workItem from="1705624791910" duration="76000" />
       <workItem from="1705624906395" duration="3308000" />
       <workItem from="1705629843962" duration="1652000" />
+      <workItem from="1705702612865" duration="444000" />
+      <workItem from="1705711387872" duration="1001000" />
     </task>
     <task id="LOCAL-00001" summary="Started project. Added assignment #1.">
       <option name="closed" value="true" />
