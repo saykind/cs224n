@@ -99,8 +99,8 @@
 %	NAME AND CLASS SECTION
 %----------------------------------------------------------------------------------------
 
-\newcommand{\hmwkTitle}{word2vec (49 Points)} % Assignment title
-\newcommand{\hmwkClass}{CS\ 224n Assignment \#2} % Course/class
+\newcommand{\hmwkTitle}{word2vec (49 pt) by D. Saykin} % Assignment title
+\newcommand{\hmwkClass}{CS\ 224n a2} % Course/class
 
 \newcommand{\ifans}[1]{\ifanswers \color{red} \vspace{5mm} \textbf{Solution: } #1 \color{black} \vspace{5mm} \fi}
 
@@ -185,7 +185,7 @@ Prove that the naive-softmax loss (Equation \ref{naive-softmax}) is the same as 
 Your answer should be one line. You may describe your answer in words.
 \begin{shaded}
 \begin{answer}
-
+Since $\bm y_w$ is one-hot vector, only non-zero term in sum is $w=o$ and $\bm y_o = 1$.
 \end{answer}
 \end{shaded}
 
@@ -208,7 +208,23 @@ Your answer should be one line. You may describe your answer in words.
 
 \begin{shaded}
 \begin{answer}
+i. Let me first ignore shape convention and compute the derivative.
+\begin{align}
+	\frac{\partial }{\partial \bm v_c} J(\bm v_c, o, \bm U)
+	&= -\frac{\partial }{\partial \bm v_c} \log \frac{\exp(\bm u_{o}^\top \bm v_c)}{\sum_{w} \exp(\bm u_{w}^\top \bm v_c)} \\
+	&= -\bm u_{o}^\top +  \frac{\sum_{w} \exp(\bm u_{w}^\top \bm v_c) \bm u_{w}^\top}{\sum_{w} \exp(\bm u_{w}^\top \bm v_c)} \\
+	&= -\bm y^\top \bm U^\top + \sum_w \hat{y}_w \bm u_{w}^\top 
+\end{align}
+Next, I will transpose the answer to satisfy shape convention
+\begin{align}
+	\frac{\partial }{\partial \bm v_c} J(\bm v_c, o, \bm U)
+	&= -\bm U \bm y + \bm U \hat{\bm y}
+	= \bm U \left( \hat{\bm y} - \bm y \right).
+\end{align}
 
+ii. Gradient $\nabla J$ is zero when $\hat{\bm y} = \bm y$, which makes sense since $\bm y$ is true distribution and $\hat{\bm y}$ is predicted distribution and loss function $J$ is cross-entropy between $\hat{\bm y}$ and $\bm y$.
+
+iii. During learning step $\bm v_c := \bm v_c - \alpha \nabla J$ vector $\bm v_c$ acquires similarity to words its surronded by through $\bm v_c := \bm v_c + \alpha \bm u_o$, while also moving away from weighted sum of all possible words in vocabulary according to $\bm v_c := \bm v_c - \alpha \bm U \hat{\bm y}$.
 \end{answer}
 \end{shaded}
 
