@@ -236,7 +236,9 @@ iii. During learning step $\bm v_c := \bm v_c - \alpha \nabla J$ vector $\bm v_c
 
 \begin{shaded}
 \begin{answer}
+Whether normalization takes away information or not depends on word embedding procedure. Let's assume that positive words (e.g. 'happy', 'good', 'excellent') have much higher norm then negative words (e.g. 'sad', 'bad', 'awful'). If we were to simply add embeddings of all the words ina sentence and deduce 'sign' of the sentence based on this sum, our result would always be skewed towards positive side, even when we have more negative words than positive words.
 
+On the other hand, it may be useful to encode 'strength' of how positive/negative word is through its embedding vector magnitude, so that say 'excellent' has larger magnitude than 'good' and hence contributes more 'positive' weight.
 \end{answer}
 \end{shaded}
 
@@ -245,7 +247,13 @@ iii. During learning step $\bm v_c := \bm v_c - \alpha \nabla J$ vector $\bm v_c
 
 \begin{shaded}
 \begin{answer}
-
+Here I use shape convention,
+\begin{align}
+    \frac{\partial }{\partial \bm u_w} J 
+    &= - y_w\bm v_c + \frac{\exp(\bm u_{w}^\top \bm v_c) \bm v_{c}}{\sum_{w} \exp(\bm u_{w}^\top \bm v_c)}
+    = (\hat{y}_w - y_w)\bm v_c.
+\end{align}
+When $w\neq o$ second term $y_w = 0$.
 \end{answer}
 \end{shaded}
 
@@ -254,7 +262,15 @@ iii. During learning step $\bm v_c := \bm v_c - \alpha \nabla J$ vector $\bm v_c
 
 \begin{shaded}
 \begin{answer}
-
+According to shape convention, 
+\begin{align}
+    \frac{\partial }{\partial \bm U} J &=
+    \begin{pmatrix}
+        \vert	&	\vert	&	\dots	&	\vert	\\
+        \frac{\partial J}{\partial \bm u_1}	&	\frac{\partial J}{\partial \bm u_2}	&	\dots	&	\frac{\partial J}{\partial \bm u_{|V|}}	\\
+        \vert	&	\vert	&	\dots	&	\vert	
+    \end{pmatrix}
+\end{align}
 \end{answer}
 \end{shaded}
 
@@ -276,7 +292,13 @@ Where $x$ is a scalar and $0<\alpha <1$, please compute the derivative of $f(x)$
 
 \begin{shaded}
 \begin{answer}
-
+\begin{align}
+    f'(x) = 
+    \begin{cases}
+        1,	&	x>0	\\
+        \alpha,	&	x<0
+    \end{cases}
+\end{align}
 \end{answer}
 \end{shaded}
 
@@ -292,7 +314,12 @@ Please compute the derivative of $\sigma(x)$ with respect to $x$, where $x$ is a
 
 \begin{shaded}
 \begin{answer}
-
+\begin{align}
+    \sigma'(x) &= \frac{e^{x}}{e^{x} + 1} - \frac{e^x}{e^{x} + 1}\frac{e^{x}}{e^{x} + 1} 
+            = \sigma(x) - \sigma^2(x)	\\
+            &= \sigma(x)\sigma(-x)
+            = \sigma(x)\left[ 1 - \sigma(x) \right]
+\end{align}
 \end{answer}
 \end{shaded}
 
@@ -320,7 +347,31 @@ Caveat: So far we have looked at re-using quantities and approximating softmax w
 
 \begin{shaded}
 \begin{answer}
+i. Let me introduce scalar $z_w = \bm u^\top_{w}\bm v_c$. Then loss function and its derivative
+\begin{align}
+    J &= -\log \sigma(z_o) - \sum_s \log \sigma(-z_{w_s})	\\
+    \frac{\partial J}{\partial z_w} 
+    &= -\frac{\sigma'(z_o)}{\sigma(z_o)}\delta_{ow} + \sum_s \frac{\sigma'(-z_{w_s})}{\sigma(-z_{w_s})} \delta_{w_sw}
+    = \begin{cases}
+        -\sigma(-z_w),	&	w=o	\\
+        \sigma(z_w),	&	w \neq o
+    \end{cases}
+    %= -\sigma(-z_w)\delta_{ow} + \sigma(z_w)(1-\delta_{ow})
+\end{align}
+Here $\delta_{ij}$ is \href{https://en.wikipedia.org/wiki/Kronecker_delta}{Kroneker delta} symbol, i.e. identity matrix with shape (K+1, K+1). Using formula above
+\begin{align}
+    \frac{\partial J}{\partial \bm u_o} &= -\sigma(-z_o) \bm v_c
+        = -\sigma(-\bm u^\top_{o}\bm v_c) \bm v_c,	\\
+    \frac{\partial J}{\partial \bm u_{w_s}} &= \sigma(z_{w_s}) \bm v_c
+        = \sigma(\bm u^\top_{w_s}\bm v_c) \bm v_c,	\\
+    \frac{\partial J}{\partial \bm v_c} &= -\sigma(-z_o) \bm u_o + \sum_s \sigma(z_{w_s}) \bm u_{w_s}	\\
+        &= -\sigma(-\bm u^\top_{o}\bm v_c) \bm u_o + \sum_s \sigma(\bm u^\top_{w_s}\bm v_c) \bm u_{w_s}.
+\end{align}
+Shape convention was used here.
 
+ii. We could reuse $(K+1)$--vector $\sigma(-\bm U^\top \bm v_c)$, where $\bm U  = \bm{U}_{o, \{w_1, \dots, w_K\}}$. 
+
+iii. In naive softmax we had to compute sum $\sum_w \exp(\bm u_w^\top \bm v_c)$, which takes $|V| \times d$ operations where $|V|$ is vocabulary size (large number) and $d$ is embedding dimension. Here most time-consuming computation is $\bm U^\top \bm v_c$, which take only $K \times d$ operations.
 \end{answer}
 \end{shaded}
 
@@ -338,15 +389,24 @@ Compute the partial derivative of $\bm J_{\text{neg-sample}}$ with respect to a 
 
 \begin{shaded}
 \begin{answer}
-
+    Derivative with respect to $\bm v_c$ and $\bm u_o$ are the same as before.
+\begin{align}
+    \frac{\partial J}{\partial \bm v_c} &= -\sigma(-\bm u^\top_{o}\bm v_c) \bm u_o + \sum_s \sigma(\bm u^\top_{w_s}\bm v_c) \bm u_{w_s}, \\
+    \frac{\partial J}{\partial \bm u_o} &= -\sigma(-\bm u^\top_{o}\bm v_c) \bm v_c.
+\end{align}
+If $w_s$ appearing $r_s$ times in the set, then loss function is gonna have $r_s$ identical terms in the sum. Let $\sum'$ stand for sum over such idecies that $w_s$ are distinct. 
+\begin{align}
+    J &= -\log(\sigma(\bm u_o^\top \bm v_c)) - {\sum_{s}}' r_s\log(\sigma(-\bm u_{w_s}^\top \bm v_c)),	\\
+    \frac{\partial J}{\partial \bm u_{w_s}} &= r_s\sigma(\bm u^\top_{w_s}\bm v_c) \bm v_c.
+\end{align}
 \end{answer}
 \end{shaded}
 
 % Question 1-J
 \item (3 points) Suppose the center word is $c = w_t$ and the context window is $[w_{t-m}$, $\ldots$, $w_{t-1}$, $w_{t}$, $w_{t+1}$, $\ldots$, $w_{t+m}]$, where $m$ is the context window size. Recall that for the  skip-gram version of {\tt word2vec}, the total loss for the context window is:
 \begin{equation}
-\label{skip-gram}
-\bm J_{\textrm{skip-gram}}(\bm v_c, w_{t-m},\ldots w_{t+m}, \bm U) = \sum_{\substack{-m\le j \le m \\ j\ne 0}} \bm J(\bm v_c, w_{t+j}, \bm U)
+    \label{skip-gram}
+    \bm J_{\textrm{skip-gram}}(\bm v_c, w_{t-m},\ldots w_{t+m}, \bm U) = \sum_{\substack{-m\le j \le m \\ j\ne 0}} \bm J(\bm v_c, w_{t+j}, \bm U)
 \end{equation}
 
 Here, $\bm J(\bm v_c, w_{t+j}, \bm U)$ represents an arbitrary loss term for the center word $c=w_t$ and outside word $w_{t+j}$. $\bm J(\bm v_c, w_{t+j}, \bm U)$ could be $\bm J_{\text{naive-softmax}}(\bm v_c, w_{t+j}, \bm U)$ or $\bm J_{\text{neg-sample}}(\bm v_c, w_{t+j}, \bm U)$, depending on your implementation.
@@ -361,7 +421,14 @@ Write your answers in terms of ${\frac{\partial \bm J(\bm v_c, w_{t+j}, \bm U)}{
 
 \begin{shaded}
 \begin{answer}
-
+\begin{align}
+    \frac{\partial } {\partial \bm U} J_{\textrm{skip-gram}}(\bm v_c, w_{t-m},\ldots w_{t+m}, \bm U)
+    &= \sum_{\substack{-m\le j \le m \\ j\ne 0}} \frac{\partial } {\partial \bm U} J(\bm v_c, w_{t+j}, \bm U) \\
+    \frac{\partial } {\partial \bm v_c} J_{\textrm{skip-gram}}(\bm v_c, w_{t-m},\ldots w_{t+m}, \bm U)
+    &=  \sum_{\substack{-m\le j \le m \\ j\ne 0}} \frac{\partial } {\partial \bm v_c} \bm J(\bm v_c, w_{t+j}, \bm U) \\
+    \frac{\partial } {\partial \bm v_{w\neq c}} J_{\textrm{skip-gram}}(\bm v_c, w_{t-m},\ldots w_{t+m}, \bm U)
+    &=  0
+\end{align}
 \end{answer}
 \end{shaded}
 
