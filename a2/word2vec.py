@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# This assigment is based on
+# https://github.com/towardsautonomy/word2vec
+# https://medium.com/@towardsautonomy/word2vec-part5-80bcccfefe44
+
 import argparse
 import numpy as np
 import random
@@ -42,7 +46,7 @@ def naiveSoftmaxLossAndGradient(
                     (o of u_o in the pdf handout)
     outsideVectors -- outside vectors is
                     in shape (num words in vocab, word vector length) 
-                    for all words in vocab (tranpose of U in the pdf handout)
+                    for all words in vocab (transpose of U in the pdf handout)
     dataset -- needed for negative sampling, unused here.
 
     Return:
@@ -103,7 +107,7 @@ def negSamplingLossAndGradient(
                     (o of u_o in the pdf handout)
     outsideVectors -- outside vectors is
                     in shape (num words in vocab, word vector length)
-                    for all words in vocab (tranpose of U in the pdf handout)
+                    for all words in vocab (transpose of U in the pdf handout)
     dataset -- needed for negative sampling, unused here.
 
     Return:
@@ -119,17 +123,21 @@ def negSamplingLossAndGradient(
     negSampleWordIndices = getNegativeSamples(outsideWordIdx, dataset, K)
     indices = [outsideWordIdx] + negSampleWordIndices
 
-    #FIXME: This is a hack to make the autograder work. Should be removed
-    U = outsideVectors[negSampleWordIndices, :]  # shape (K, word vector length)
-    U = np.vstack((outsideVectors[outsideWordIdx, :], -U))  # shape (K+1, word vector length)
-    y = sigmoid(-U@centerWordVec)  # shape (K+1, )
-    loss = - np.sum(np.log(1-y))  # scalar
+    # Compute loss
+    U = outsideVectors[negSampleWordIndices]  # shape (K, word vector length)
+    U = np.vstack((-outsideVectors[outsideWordIdx], U))  # shape (K+1, word vector length)
+    y = sigmoid(U @ centerWordVec)  # shape (K+1, )
+    loss = - np.sum(np.log(1 - y))  # scalar
 
-    sign_vec = np.ones(y.shape)
+    # Compute gradient w.r.t. center word vector
+    gradCenterVec = U.T @ y  # shape (word vector length, )
+
+    # Compute gradient w.r.t. outside word vectors
+    sign_vec = np.ones_like(y)
     sign_vec[0] = -1
-    y = sign_vec * y  # shape (K+1, )
-    gradOutsideVecs = np.outer(y, centerWordVec)  # shape (K+1, word vector length)
-    gradCenterVec = U.T@y  # shape (word vector length, )
+    dU = np.outer(sign_vec * y, centerWordVec)  # shape (K+1, word vector length)
+    gradOutsideVecs = np.zeros_like(outsideVectors) # shape (V, word vector length)
+    np.add.at(gradOutsideVecs, indices, dU)
 
     return loss, gradCenterVec, gradOutsideVecs
 
@@ -163,7 +171,7 @@ def skipgram(currentCenterWord, windowSize, outsideWords, word2Ind,
             (J in the pdf handout)
     gradCenterVecs -- the gradient with respect to the center word vector
                      in shape (num words in vocab, word vector length)
-                     (dJ / dv_c in the pdf handout)
+                     (dJ / dv_c)
     gradOutsideVecs -- the gradient with respect to all the outside word vectors
                     in shape (num words in vocab, word vector length) 
                     (dJ / dU)
@@ -173,9 +181,13 @@ def skipgram(currentCenterWord, windowSize, outsideWords, word2Ind,
     gradCenterVecs = np.zeros(centerWordVectors.shape)
     gradOutsideVectors = np.zeros(outsideVectors.shape)
 
-    ### YOUR CODE HERE (~8 Lines)
-
-    ### END YOUR CODE
+    centerWordIdx = word2Ind[currentCenterWord]
+    for ow in outsideWords:
+        outsideWordIdx = word2Ind[ow]
+        loss_j, gradCenterVec_j, gradOutsideVecs_j = word2vecLossAndGradient(centerWordVectors[centerWordIdx], outsideWordIdx, outsideVectors, dataset)
+        loss += loss_j
+        gradCenterVecs[centerWordIdx] += gradCenterVec_j
+        gradOutsideVectors += gradOutsideVecs_j
     
     return loss, gradCenterVecs, gradOutsideVectors
 
