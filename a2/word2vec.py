@@ -49,19 +49,18 @@ def naiveSoftmaxLossAndGradient(
     loss -- naive softmax loss
     gradCenterVec -- the gradient with respect to the center word vector
                      in shape (word vector length, )
-                     (dJ / dv_c in the pdf handout)
     gradOutsideVecs -- the gradient with respect to all the outside word vectors
-                    in shape (num words in vocab, word vector length) 
-                    (dJ / dU)
+                    in shape (num words in vocab, word vector length)
     """
 
-    ### YOUR CODE HERE (~6-8 Lines)
+    y_hat = softmax(outsideVectors@centerWordVec)    # shape (num words in vocab, )
+    loss = -np.log(y_hat[outsideWordIdx])
 
-    ### Please use the provided softmax function (imported earlier in this file)
-    ### This numerically stable implementation helps you avoid issues pertaining
-    ### to integer overflow. 
+    y_true = np.zeros(y_hat.shape)
+    y_true[outsideWordIdx] = 1
 
-    ### END YOUR CODE
+    gradCenterVec = outsideVectors.T@(y_hat-y_true)  # shape (word vector length, )
+    gradOutsideVecs = np.outer(y_hat-y_true, centerWordVec)  # shape (num words in vocab, word vector length)
 
     return loss, gradCenterVec, gradOutsideVecs
 
@@ -96,7 +95,23 @@ def negSamplingLossAndGradient(
     double count the gradient with respect to this word. Thrice if
     it was sampled three times, and so forth.
 
-    Arguments/Return Specifications: same as naiveSoftmaxLossAndGradient
+    Arguments:
+    centerWordVec -- numpy ndarray, center word's embedding
+                    in shape (word vector length, )
+                    (v_c in the pdf handout)
+    outsideWordIdx -- integer, the index of the outside word
+                    (o of u_o in the pdf handout)
+    outsideVectors -- outside vectors is
+                    in shape (num words in vocab, word vector length)
+                    for all words in vocab (tranpose of U in the pdf handout)
+    dataset -- needed for negative sampling, unused here.
+
+    Return:
+    loss -- naive softmax loss
+    gradCenterVec -- the gradient with respect to the center word vector
+                     in shape (word vector length, )
+    gradOutsideVecs -- the gradient with respect to all the outside word vectors
+                    in shape (K+1, word vector length)
     """
 
     # Negative sampling of words is done for you. Do not modify this if you
@@ -104,11 +119,17 @@ def negSamplingLossAndGradient(
     negSampleWordIndices = getNegativeSamples(outsideWordIdx, dataset, K)
     indices = [outsideWordIdx] + negSampleWordIndices
 
-    ### YOUR CODE HERE (~10 Lines)
+    #FIXME: This is a hack to make the autograder work. Should be removed
+    U = outsideVectors[negSampleWordIndices, :]  # shape (K, word vector length)
+    U = np.vstack((outsideVectors[outsideWordIdx, :], -U))  # shape (K+1, word vector length)
+    y = sigmoid(-U@centerWordVec)  # shape (K+1, )
+    loss = - np.sum(np.log(1-y))  # scalar
 
-    ### Please use your implementation of sigmoid in here.
-
-    ### END YOUR CODE
+    sign_vec = np.ones(y.shape)
+    sign_vec[0] = -1
+    y = sign_vec * y  # shape (K+1, )
+    gradOutsideVecs = np.outer(y, centerWordVec)  # shape (K+1, word vector length)
+    gradCenterVec = U.T@y  # shape (word vector length, )
 
     return loss, gradCenterVec, gradOutsideVecs
 
