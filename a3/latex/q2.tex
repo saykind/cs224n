@@ -21,20 +21,42 @@ On each step, your parser will decide among the three transitions using a neural
 \begin{parts}
     \part[4] Go through the sequence of transitions needed for parsing the sentence {\it ``I attended lectures in the NLP class''}. The dependency tree for the sentence is shown below. At each step, give the configuration of the stack and buffer, as well as what transition was applied this step and what new dependency was added (if any). The first three steps are provided below as an example. \\
 
-    %\begin{center}
-    \includegraphics[width=80mm]{example.jpg} \\
-    %\end{center}
-    
-    \begin{tabular}{ l | l | l | l}
-    Stack & Buffer & New dependency & Transition \\ \hline
-    [ROOT] & [I, attended, lectures, in, the, NLP, class] &  & Initial Configuration \\
-    $[$ROOT, I] & [attended, lectures, in, the, NLP, class] &  &  \texttt{SHIFT}  \\
-    $[$ROOT, I, attended] & [lectures, in, the, NLP, class] &  &  \texttt{SHIFT}  \\
-    $[$ROOT, attended] & [lectures, in, the, NLP, class] & attended$\to$I &  \texttt{LEFT-ARC}  \\
+    \begin{center}
+    \includegraphics[width=150mm]{example.jpg} \\
+    \end{center}
+    \newpage
+     \begin{shaded}
+    	\begin{answer}
+    		See table below.
+    	\end{answer}
+    \end{shaded}
+    \hspace*{-20mm}
+    \begin{tabular}{ m{4.9cm} | m{6.2cm} | c | c }
+    Stack & Buffer & New dependency & Transition \\ \hline \hline
+    [R] & [I, attended, lectures, in, the, NLP, class] &  & Initial conf \\ \hline
+    [R, I] & [attended, lectures, in, the, NLP, class] &  &  \texttt{SHIFT}  \\ \hline
+    [R, I, attended] & [lectures, in, the, NLP, class] &  &  \texttt{SHIFT}  \\ \hline
+    [R, attended] & [lectures, in, the, NLP, class] & attended$\to$I &  \texttt{LEFT-ARC}  \\ \hline
+    [R, attended, lectures] & [in, the, NLP, class] &  &  \texttt{SHIFT} \\ \hline
+    [R, attended] & [in, the, NLP, class] &  attended$\to$lectures &  \texttt{RIGHT-ARC} \\ \hline
+    [R, attended, in] & [the, NLP, class] &  &  \texttt{SHIFT} \\ \hline
+    [R, attended, in, the] & [NLP, class] &  &  \texttt{SHIFT} \\ \hline
+    [R, attended, in, the, NLP] & [class] &  &  \texttt{SHIFT} \\ \hline
+    [R, attended, in, the, NLP, class] &  &  &  \texttt{SHIFT} \\ \hline
+    [R, attended, in, the, class] &  & class$\to$NLP &  \texttt{LEFT-ARC} \\ \hline 
+    [R, attended, in, class] &  & class$\to$the &  \texttt{LEFT-ARC} \\ \hline
+    [R, attended, class] &  & class$\to$in &  \texttt{LEFT-ARC} \\ \hline
+    [R, attended] &  &  attended$\to$class &  \texttt{RIGHT-ARC} \\ \hline
+    [R] &  &  R$\to$attended &  \texttt{RIGHT-ARC}
     \end{tabular}\newline
 
     
     \part[2] A sentence containing $n$ words will be parsed in how many steps (in terms of $n$)? Briefly explain in 1--2 sentences why.
+    \begin{shaded}
+    	\begin{answer}
+    		It will be parsed in $2n+1$ step, which consist of $n$ shifts, $n$ arcs and one more root arc.
+    	\end{answer}
+    \end{shaded}
 
        
     

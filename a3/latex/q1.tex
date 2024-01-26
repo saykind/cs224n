@@ -1,3 +1,4 @@
+% !TeX root = main.tex
 \titledquestion{Machine Learning \& Neural Networks}[8] 
 \begin{parts}
 
@@ -18,7 +19,12 @@
                 	\btheta_{t+1} &\gets \btheta_t - \alpha \bm_{t+1}
                 }
                 where $\beta_1$ is a hyperparameter between 0 and 1 (often set to  0.9). Briefly explain in 2--4 sentences (you don't need to prove mathematically, just give an intuition) how using $\bm$ stops the updates from varying as much and why this low variance may be helpful to learning, overall.\newline
-              
+                
+                \begin{shaded}
+               	\begin{answer}
+                	After $m$ steps gradient are averaged $m$ times (through the process known as exponential moving average) which leads to a more smooth and stable convergence. Low gradient variance is helpful since it leads to faster convergence.
+               	\end{answer}
+                \end{shaded}
                 
             \subpart[2] Adam extends the idea of {\it momentum} with the trick of {\it adaptive learning rates} by keeping track of  $\bv$, a rolling average of the magnitudes of the gradients:
                 \alns{
@@ -28,9 +34,14 @@
                 }
                 where $\odot$ and $/$ denote elementwise multiplication and division (so $\bz \odot \bz$ is elementwise squaring) and $\beta_2$ is a hyperparameter between 0 and 1 (often set to  0.99). Since Adam divides the update by $\sqrt{\bv}$, which of the model parameters will get larger updates?  Why might this help with learning?
                 
-           
-                
                 \end{subparts}
+                
+                \begin{shaded}
+                	\begin{answer}
+                		Term $v$ represents the exponentially moving average of past squared gradients. By dividing by $\sqrt{v}$ variance is further decreased. Compenets of $\btheta$ which have large variance get penalized more than compopents with small variance, so that all components have roughly the same variance.
+                	\end{answer}
+                \end{shaded}
+        
         
         
             \part[4] 
@@ -50,6 +61,17 @@
                 
             
           \subpart[2] Why should dropout be applied during training? Why should dropout \textbf{NOT} be applied during evaluation? (Hint: it may help to look at the paper linked above in the write-up.) \newline
+          
+          \begin{shaded}
+          \begin{answer}
+          	i. Let's compute expectation value for $\bn_\text{drop}$.
+          	\begin{align}
+          		\mathbb{E}_{p_{\text{drop}}}[\bh_\text{drop}]_i = \gamma(1-p)h_i = h_i.
+          	\end{align}
+          	We see that $\gamma = (1-p)^{-1}$.
+          	ii.  Dropout is a regularization technique that helps to prevent overfitting, hence they should be used to make neural network generalization ability better. Somtimes, dropout regularization should be avoided since it adds randomness which may be undesired and it also make training more computationaly costly.
+          \end{answer}
+          \end{shaded}
           
          
         \end{subparts}

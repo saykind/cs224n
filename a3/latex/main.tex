@@ -22,6 +22,7 @@
 \usepackage{algorithmicx}
 \usepackage[ruled]{algorithm}
 \usepackage{tikz-dependency}
+\usepackage{array}
 
 \usepackage{tikz}
 \usetikzlibrary{positioning,patterns,fit,calc}
@@ -52,6 +53,12 @@
 \firstpagefooter{}{}{} \runningfooter{}{}{}
 
 \setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\newenvironment{answer}{
+	% Uncomment this if using the template to write out your solutions.
+	{\bf Answer:} \sf \begingroup\color{red}
+}{\endgroup}%
+\definecolor{shadecolor}{gray}{0.9}
 
 %----------------------------------------------------------------------------------------
 %	CODE INCLUSION CONFIGURATION
@@ -92,7 +99,7 @@
 %----------------------------------------------------------------------------------------
 
 \newcommand{\hmwkTitle}{Dependency Parsing} % Assignment title
-\newcommand{\hmwkClass}{CS\ 224n Assignment \#3} % Course/class
+\newcommand{\hmwkClass}{CS\ 224n a3 by D. Saykin} % Course/class
 \newcommand{\ifans}[1]{\ifanswers \color{red} \textbf{Solution: } #1 \color{black} \fi}
 
 % \newcommand{\ifans}[1]{}
