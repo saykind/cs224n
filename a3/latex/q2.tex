@@ -61,9 +61,15 @@ On each step, your parser will decide among the three transitions using a neural
        
     
     \part[6] Implement the \texttt{\_\_init\_\_} and \texttt{parse\_step} functions in the \texttt{PartialParse} class in \texttt{parser\_transitions.py}. This implements the transition mechanics your parser will use. You can run basic (non-exhaustive) tests by running \texttt{python parser\_transitions.py part\_c}.
+    
+    \begin{shaded}
+    	\begin{answer}
+	    	Done.
+    	\end{answer}
+    \end{shaded}
 
     \part[8] Our network will predict which transition should be applied next to a partial parse. We could use it to parse a single sentence by applying predicted transitions until the parse is complete. However, neural networks run much more efficiently when making predictions about \textit{batches} of data at a time (i.e., predicting the next transition for any different partial parses simultaneously). We can parse sentences in minibatches with the following algorithm. \newline
-
+    
     \alglanguage{pseudocode}
     \begin{algorithm*}[h]
     \caption{Minibatch Dependency Parsing}
@@ -93,6 +99,13 @@ On each step, your parser will decide among the three transitions using a neural
     Implement this algorithm in the \texttt{minibatch\_parse} function in \texttt{parser\_transitions.py}. You can run basic (non-exhaustive) tests by running \texttt{python parser\_transitions.py part\_d}.
 
     {\it Note: You will need \texttt{minibatch\_parse} to be correctly implemented to evaluate the model you will build in part (e). However, you do not need it to train the model, so you should be able to complete most of part (e) even if \texttt{minibatch\_parse} is not implemented yet.} \newline
+    
+        \begin{shaded}
+    	\begin{answer}
+    		Done.
+    	\end{answer}
+    \end{shaded}
+    
     
     \part[12] We are now going to train a neural network to predict, given the state of the stack, buffer, and dependencies, which transition should be applied next.
     

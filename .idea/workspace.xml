@@ -4,14 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0de46a6-4697-462f-9b71-df08810224b9" name="Changes" comment="Started pytorch tutorial.">
+    <list default="true" id="e0de46a6-4697-462f-9b71-df08810224b9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/a3/latex/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/main.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/latex/main.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/main.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/latex/q1.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/q1.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/a3/latex/q2.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/q2.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/latex/std_macros.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/std_macros.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/parser/parser_transitions.py" beforeDir="false" afterPath="$PROJECT_DIR$/a3/parser/parser_transitions.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a3/parser/parser_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/a3/parser/parser_model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a3/parser/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/a3/parser/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -111,6 +109,8 @@
       <workItem from="1705958830668" duration="211000" />
       <workItem from="1706053747218" duration="2042000" />
       <workItem from="1706165619656" duration="976000" />
+      <workItem from="1706231164274" duration="2110000" />
+      <workItem from="1706234625421" duration="1233000" />
     </task>
     <task id="LOCAL-00001" summary="Started project. Added assignment #1.">
       <option name="closed" value="true" />
