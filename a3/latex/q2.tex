@@ -54,19 +54,13 @@ On each step, your parser will decide among the three transitions using a neural
     \part[2] A sentence containing $n$ words will be parsed in how many steps (in terms of $n$)? Briefly explain in 1--2 sentences why.
     \begin{shaded}
     	\begin{answer}
-    		It will be parsed in $2n+1$ step, which consist of $n$ shifts, $n$ arcs and one more root arc.
+    		It will be parsed in $2n$ step, which consist of $n$ shifts and $n$ arcs (including last root arc).
     	\end{answer}
     \end{shaded}
 
        
     
     \part[6] Implement the \texttt{\_\_init\_\_} and \texttt{parse\_step} functions in the \texttt{PartialParse} class in \texttt{parser\_transitions.py}. This implements the transition mechanics your parser will use. You can run basic (non-exhaustive) tests by running \texttt{python parser\_transitions.py part\_c}.
-    
-    \begin{shaded}
-    	\begin{answer}
-	    	Done.
-    	\end{answer}
-    \end{shaded}
 
     \part[8] Our network will predict which transition should be applied next to a partial parse. We could use it to parse a single sentence by applying predicted transitions until the parse is complete. However, neural networks run much more efficiently when making predictions about \textit{batches} of data at a time (i.e., predicting the next transition for any different partial parses simultaneously). We can parse sentences in minibatches with the following algorithm. \newline
     
@@ -100,9 +94,9 @@ On each step, your parser will decide among the three transitions using a neural
 
     {\it Note: You will need \texttt{minibatch\_parse} to be correctly implemented to evaluate the model you will build in part (e). However, you do not need it to train the model, so you should be able to complete most of part (e) even if \texttt{minibatch\_parse} is not implemented yet.} \newline
     
-        \begin{shaded}
+    \begin{shaded}
     	\begin{answer}
-    		Done.
+    		Dev UAS: 88.67. Test UAS: 89.01.
     	\end{answer}
     \end{shaded}
     
@@ -229,8 +223,47 @@ In particular, you \textbf{do not} need to look at the labels on the the depende
 \medskip
 
 \input{dep_parses.tex}
+\newpage
+
+\begin{shaded}
+	\begin{answer}
+		i. The university blocked the acquisition...
+		\begin{itemize}
+			\item \textbf{Error type}: Verb Phrase Attachment Error
+			\item \textbf{Incorrect dependency}: acquisition $\rightarrow$ citing 
+			\item \textbf{Correct dependency}: blocked $\rightarrow$ citing
+		\end{itemize}
+		
+		ii. Many managers and traders...
+		\begin{itemize}
+			\item \textbf{Error type}: Modifier Attachment Error
+			\item \textbf{Incorrect dependency}: left $\rightarrow$ early 
+			\item \textbf{Correct dependency}: Friday $\rightarrow$ early
+		\end{itemize}
+		
+		iii. Investment Canada declined to...
+		\begin{itemize}
+			\item \textbf{Error type}: Prepositional Phrase Attachment Error
+			\item \textbf{Incorrect dependency}: declined $\rightarrow$ decision 
+			\item \textbf{Correct dependency}: reasons $\rightarrow$ decision
+		\end{itemize}
+		
+		iv. People benefit from a...
+		\begin{itemize}
+			\item \textbf{Error type}: Coordination Attachment Error
+			\item \textbf{Incorrect dependency}: affects $\rightarrow$ one 
+			\item \textbf{Correct dependency}: plants $\rightarrow$ one
+		\end{itemize}
+	\end{answer}
+\end{shaded}
 
 
 \part[2] Recall in part (e), the parser uses features which includes words and their part-of-speech (POS) tags. Explain the benefit of using part-of-speech tags as features in the parser?
+
+\begin{shaded}
+	\begin{answer}
+		Using part-of-speech tags as features in a parser helps improve parsing accuracy by providing crucial information about word roles and grammatical structure in sentences, aiding in disambiguation and syntactic analysis.
+	\end{answer}
+\end{shaded}
 
 \end{parts}

@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e0de46a6-4697-462f-9b71-df08810224b9" name="Changes" comment="">
+    <list default="true" id="e0de46a6-4697-462f-9b71-df08810224b9" name="Changes" comment="Solved a3 q2.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/a3/latex/main.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/main.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/a3/latex/q1.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/q1.tex" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/a3/latex/q2.tex" beforeDir="false" afterPath="$PROJECT_DIR$/a3/latex/q2.tex" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/parser/parser_model.py" beforeDir="false" afterPath="$PROJECT_DIR$/a3/parser/parser_model.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/a3/parser/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/a3/parser/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +84,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-python-sdk-50da183f06c8-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13135.95" />
+        <option value="bundled-python-sdk-5a2391486177-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13763.11" />
       </set>
     </attachedChunks>
   </component>
@@ -110,7 +109,9 @@
       <workItem from="1706053747218" duration="2042000" />
       <workItem from="1706165619656" duration="976000" />
       <workItem from="1706231164274" duration="2110000" />
-      <workItem from="1706234625421" duration="1233000" />
+      <workItem from="1706234625421" duration="2565000" />
+      <workItem from="1706383824863" duration="36000" />
+      <workItem from="1706383893852" duration="1986000" />
     </task>
     <task id="LOCAL-00001" summary="Started project. Added assignment #1.">
       <option name="closed" value="true" />
@@ -136,7 +137,15 @@
       <option name="project" value="LOCAL" />
       <updated>1705523868152</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Solved a3 q2.">
+      <option name="closed" value="true" />
+      <created>1706236047868</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1706236047868</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,7 +166,8 @@
     <MESSAGE value="Started project. Added assignment #1." />
     <MESSAGE value="Solved q1.1 in a1." />
     <MESSAGE value="Added assignment 2." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added assignment 2." />
+    <MESSAGE value="Solved a3 q2." />
+    <option name="LAST_COMMIT_MESSAGE" value="Solved a3 q2." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
