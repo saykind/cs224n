@@ -1,3 +1,4 @@
+% !TeX root = main.tex
 \graphicspath{ {images/} }
 
 % real numbers R symbol
@@ -134,7 +135,10 @@ Note that this virtual environment \textbf{will not} be needed on the VM.\newlin
     First explain (in around three sentences) what effect the masks have on the entire attention computation.
     Then explain (in one or two sentences) why it is necessary to use the masks in this way.
 
-    \ifans{}
+    \ifans{
+    	Applying this mask, sets values of $\be_t$ corresponding to padded words (outside of the sentence) to $-\infty$. After applying softmax this results in zero values for elements of $\alpha_t$ (See eq. (8)). Finally, as can be seen from eq. (9) this leads to complete ignore of enconding of padded words: $\bh_i^\text{enc}$ is ignored in attention computation for $i$ larger than sentence length.
+    	
+    	This is done in to ignore the influence of padding words when computing the attention scores. If this isn't done, decoder will use encodings of padded words, which may lead to unexpected results.}
 \end{parts}
 
 Now it's time to get things running! As noted earlier, we recommend that you develop the code on your personal computer.  Confirm that you are running in the proper conda environment and then execute the following command to train the model on your local machine:
