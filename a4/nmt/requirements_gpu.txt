@@ -1,6 +1,6 @@
 nltk
 docopt
-tqdm==4.32.2
+tqdm==4.48.2
 sentencepiece
 lxml==5.0.0
 sacrebleu
