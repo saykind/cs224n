@@ -201,7 +201,7 @@ sh run.sh test
 \end{lstlisting}
     Please report the model's corpus BLEU Score. It should be larger than 18.
     
-    \ifans{}
+    \ifans{BLEU score is $19.8896$}
     
     \part[4] (written) In class, we learned about dot product attention, multiplicative attention, and additive attention.  As a reminder, dot product attention is $\be_{t,i} = \bs_t^T\bh_i$, multiplicative attention is $\be_{t,i} = \bs_t^T\bW\bh_i$, and additive attention is $\be_{t,i} = \bv^T \text{tanh}(\bW_1\bh_i + \bW_2\bs_t)$.
     
@@ -210,5 +210,18 @@ sh run.sh test
     \subpart[2] Explain one advantage and one disadvantage of \textit{additive attention} compared to multiplicative attention.
     \end{subparts}
             
-    \ifans{}
+    \ifans{
+    \begin{subparts}
+    	\subpart[2] Dot product attention.
+    	\begin{itemize}
+    		\item Advantage: dot product attention is computationally efficient and simpler to implement compared to multiplicative attention.
+    		\item Disadvantage: dot product attention can be sensitive to the scale of the input vectors, which can lead to issues with vanishing or exploding gradients during training.
+    	\end{itemize}
+    	\subpart[2] Additive attention.
+    	\begin{itemize}
+    		\item Advantage: Additive attention is more flexible in modeling complex relationships between query and key vectors because it uses learnable parameters to compute the attention scores.
+    		\item Disadvantage: Additive attention introduces additional learnable parameters, making the model more complex and potentially harder to train.
+    	\end{itemize}
+    \end{subparts}
+    }
 \end{parts}
