@@ -111,7 +111,7 @@
         \ifans{
         	Let me consider $\bc_1$. It has $\text{len}(\bc_1) = 9$ unigrams "there", "is", "a", "need", "for", "adequate", "and", "predictable", "resources". Unigrams "adequate" and "and" appears in $\br_2$, while unigrams "predictable" and "resources" appear in both $\br_1$ and $\br_2$, hence
         	\begin{align}
-        		p_1(\bc_1) = \frac{1+1+2+2}{9} = \frac{2}{3}.
+        		p_1(\bc_1) = \frac{1+1+1+1}{9} = \frac{4}{9}.
         	\end{align}
         	Next, there are $\text{len}(\bc_1) - 1 = 8$ bigrams in $\bc_1$. It shares the following three bigrams with $\br_2$: "adequate and", "and predictable", "predictable resources".
         	\begin{align}
@@ -120,7 +120,7 @@
         	
         	Let me consider $\bc_2$. It has $\text{len}(\bc_2) = 6$ unigrams and $\text{len}(\bc_1) - 1 = 5$ bigrams.
         	\begin{align}
-        		p_1(\bc_2) &= \frac{6+3}{6} = \frac{3}{2},	&
+        		p_1(\bc_2) &= \frac{6}{6} = 1,	&
         		p_2(\bc_2) = \frac{3}{5} = \frac{3}{5}.
         	\end{align}
         	
@@ -128,10 +128,10 @@
         	
         	Finally,
         	\begin{align}
-        		\text{BLEU}(\bc_1) = \exp\left(-\frac{2}{9} + \frac12 \ln \frac{2}{3} + \frac12 \ln \frac{3}{8} \right) = .400
+        		\text{BLEU}(\bc_1) = \exp\left(-\frac{2}{9} + \frac12 \ln \frac{1}{3} + \frac12 \ln \frac{3}{8} \right) = .327
         	\end{align}
         	\begin{align}
-        		\text{BLEU}(\bc_2) = \exp\left( \frac12 \ln \frac{3}{2} + \frac12 \ln \frac{3}{5} \right) = .949
+        		\text{BLEU}(\bc_2) = \exp\left( 0 + \frac12 \ln \frac{3}{5} \right) = \sqrt{\frac{3}{5}} = .775
         	\end{align}
         	
         	Translation $\bc_2$ has higher BLEU score, but it's obviously worst translation, it's grammaticlaly incorrect.
@@ -154,10 +154,10 @@
         	
         	Finally
         	\begin{align}
-        		\text{BLEU}(\bc_1) = \exp\left( \frac12 \ln \frac{4}{9} + \frac12 \ln \frac{3}{8} \right) = .408
+        		\text{BLEU}(\bc_1) = \exp\left( \frac12 \ln \frac{4}{9} + \frac12 \ln \frac{3}{8} \right) = \frac{1}{\sqrt{6}} = .408
         	\end{align}
         	\begin{align}
-        		\text{BLEU}(\bc_2) = \exp\left( \frac12 \ln \frac{1}{2} + \frac12 \ln \frac{1}{5} \right) = .316
+        		\text{BLEU}(\bc_2) = \exp\left( \frac12 \ln \frac{1}{2} + \frac12 \ln \frac{1}{5} \right) = \frac{1}{\sqrt{10}} = .316
         	\end{align}
         	Translation $\bc_1$ has higher BLEU score, I agree that $\bc_1$ is better translation.
         }
