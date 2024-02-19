@@ -1,5 +1,5 @@
 # Local files
-lectures/
+lectures/*.pdf
 
 # MacOS
 *.DS_Store

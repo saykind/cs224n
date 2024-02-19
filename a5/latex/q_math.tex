@@ -1,3 +1,5 @@
+% !TeX root = main.tex
+
 \graphicspath{ {images/} }
 
 \titledquestion{Attention exploration}[20]
@@ -19,14 +21,14 @@ Observe that the output $c\in\mathbb{R}^d$ is an average over the value vectors 
 \part[5] \label{copying} \textbf{Copying in attention.} One advantage of attention is that it's particularly easy to ``copy'' a value vector to the output $c$. In this problem, we'll motivate why this is the case.
 
 \begin{subparts}
-    \subpart[1] \textbf{Explain} why $\alpha$ can be interpreted as a \href{https://en.wikipedia.org/wiki/Categorical_distribution}{categorical probability distribution}. 
-    \ifans{}
-    \subpart[2] The distribution $\alpha$ is typically relatively ``diffuse''; the probability mass is spread out between many different $\alpha_i$. However, this is not always the case. \textbf{Describe} (in one sentence) under what conditions the categorical distribution $\alpha$ puts almost all of its weight on some $\alpha_j$, where $j \in \{1, \ldots, n\}$ (i.e. $\alpha_j \gg \sum_{i \neq j} \alpha_i$). What must be true about the query $q$ and/or the keys $\{k_1,\dots,k_n\}$?
-    \ifans{}
-    \subpart[1] Under the conditions you gave in (ii),  \textbf{describe} the output $c$. 
-    \ifans{}
+    \subpart[1] \textbf{Explain} why $\alpha$ can be interpreted as a \href{https://en.wikipedia.org/wiki/Categorical_distribution}{categorical probability distribution}. \\
+    \ifans{The softmax function ensures that the output values (the attention weights) are non-negative and normalized. Therefore, each $\alpha$ represents the probability that a given word should attend to every other word in the sequence.}
+    \subpart[2] The distribution $\alpha$ is typically relatively ``diffuse''; the probability mass is spread out between many different $\alpha_i$. However, this is not always the case. \textbf{Describe} (in one sentence) under what conditions the categorical distribution $\alpha$ puts almost all of its weight on some $\alpha_j$, where $j \in \{1, \ldots, n\}$ (i.e. $\alpha_j \gg \sum_{i \neq j} \alpha_i$). What must be true about the query $q$ and/or the keys $\{k_1,\dots,k_n\}$?\\
+    \ifans{Difference between scalar product Vector $q^Tk_j$ and other scalar products $q^Tk_i$ must be large, i.e. $q^Tk_j - q^Tk_i \gg 1$.}
+    \subpart[1] Under the conditions you gave in (ii),  \textbf{describe} the output $c$. \\
+    \ifans{Vector $c\approx v_j$.}
     \subpart[1] \textbf{Explain} (in two sentences or fewer) what your answer to (ii) and (iii) means intuitively. We are looking for what $c$ looks like in terms of the value vectors $\{v_1,\dots,v_n\}$ based on the relation between $q$ and the keys $\{k_1,\dots,k_n\}$. \\
-    \ifans{}
+    \ifans{Vector $c$ looks like an average of such $v_i$ for which dot product $q^Tk_i$ is largest.}
 
 \end{subparts}
 
@@ -46,13 +48,14 @@ Additionally, suppose that the two subspaces are orthogonal; i.e. $a_j^\top b_k 
 
 \textbf{Note:} There are several ways to approach this problem. A hint that can be useful for one approach: given that the vectors $\{a_1, a_2, \ldots, a_m\}$ are both \textit{orthogonal} and \textit{form a basis} for $v_a$, we know that there exist some $c_1, c_2, \ldots, c_m$ such that $v_a = c_1 a_1 + c_2 a_2 + \cdots + c_m a_m$. Can you create a vector of these weights $c$? 
 
-\ifans{}
+\ifans{Obviously, $M$ is a projector on subspace $A$, it can be written as $M = \sum_{i=1}^{m} a_i \otimes a_i^T$.
+Indeed, $Mv_b = 0$ because $v_b$ is a linear combination of $\{ b_i \}$ and $a$--basis vectors are orthogonal to $b$--basis vectors. Also, $Mv_a = v_a$ because $a_i \otimes a_i^T a_j = a_j \delta_{ij}$, where $\delta$ is \href{https://en.wikipedia.org/wiki/Kronecker_delta}{Kronecker $\delta$--symbol}. Hence $M(v_a + v_b) = v_a$.}
 
 \subpart[4] As before, let $v_a$ and $v_b$ be two value vectors corresponding to key vectors $k_a$ and $k_b$, respectively.
 Assume that (1) all key vectors are orthogonal, so $k_i^\top k_j = 0$ for all $i \neq j$; and (2) all key vectors have norm $1$.\footnote{Recall that a vector $x$ has norm 1 iff $x^\top x = 1$.}
 \textbf{Find an expression} for a query vector $q$ such that $c \approx \frac{1}{2}(v_a + v_b)$, and justify your answer.\footnote{Hint: while the softmax function will never \textit{exactly} average the two vectors, you can get close by using a large scalar multiple in the expression.} (Recall what you learned in part~(\ref{copying}).)
 
-\ifans{}
+\ifans{When $q = A( k_a+  k_b )$ then $q^Tk_j = 0$ for any $j \neq a$, $b$. Also, $q^Tk_a = q^Tk_b = A$. If we choose large scalar $A \gg 1$, it would lead to $c \approx \frac{1}{2}(v_a + v_b)$.}
 \end{subparts}
 
 \part[5]\textbf{Drawbacks of single-headed attention:} \label{q_problem_with_single_head}
@@ -65,7 +68,26 @@ Further, assume that the means $\mu_i$ are all perpendicular; $\mu_i^\top \mu_j 
 \begin{subparts}
 \subpart[2] Assume that the covariance matrices are $\Sigma_i = \alpha I, \forall i \in \{1, 2, \ldots, n\}$, for vanishingly small $\alpha$.
 Design a query $q$ in terms of the $\mu_i$ such that as before, $c\approx \frac{1}{2}(v_a + v_b)$, and provide a brief argument as to why it works.
-\ifans{}
+
+\ifans{
+	It is clear that $q = A( \mu_a+  \mu_b )$ is a good candidate. 
+	Let $\epsilon \sim \mathcal{N}(0, \Sigma_i)$, then $k_i = \mu_i + \epsilon$ and on average $\langle q^T k_i \rangle = q^T\mu_i + q^T \langle \epsilon \rangle = q^T\mu_i$ and variance of this quantity is 
+	$$
+		\operatorname{Var}(q^Tk_i) = \langle q^T\epsilon \cdot q^T\epsilon \rangle 
+		= q^T\Sigma_iq = \alpha q^Tq = 2A^2\alpha,
+	$$
+	or in other words, due to linearity, scalar product has normal distribution 
+	$$q^T k_i \sim \mathcal{N}(q^T\mu_i, 2A^2\alpha)$$
+	We can keep variations small by choosing, say, $A = \alpha^{-1/4}$. Then $\alpha \ll 1$, $A \gg 1$ and variance $A^2\alpha = \sqrt{\alpha} \ll 1$.
+	Because variations are small, we can approximately say that variations are absent and replace variables with their mean values.
+	$$ 
+		\langle \operatorname{softmax} (\{ q^Tk_i \}_i) \rangle
+		\approx 
+		\operatorname{softmax} (\{ q^T\mu_i \}_i).
+	$$	
+	Then once again all the weight of the distribution is split equally $\alpha_a$ and $\alpha_b$, while all other $\alpha_i$ are negligible.
+	In short, even though keys are random, since variance is small, approximatelly we still have the same result as before.
+}
 
 \subpart[3] Though single-headed attention is resistant to small perturbations in the keys, some types of larger perturbations may pose a bigger issue. Specifically, in some cases, one key vector $k_a$ may be larger or smaller in norm than the others, while still pointing in the same direction as $\mu_a$. As an example, let us consider a covariance for item $a$ as $\Sigma_a = \beta I + \frac{1}{2}(\mu_a\mu_a^\top)$ for vanishingly small $\beta$ (as shown in figure \ref{ka_plausible}). This causes $k_a$ to point in roughly the same direction as $\mu_a$, but with large variances in magnitude. Further, let $\Sigma_i = \beta I$ for all $i \neq a$.
 \begin{figure}[h]
@@ -78,7 +100,15 @@ Design a query $q$ in terms of the $\mu_i$ such that as before, $c\approx \frac{
 
 When you sample $\{k_1,\dots,k_n\}$ multiple times, and use the $q$ vector that you defined in part i., what do you expect the vector $c$ will look like qualitatively for different samples? Think about how it differs from part (i) and how $c$'s variance would be affected.
 
-\ifans{}
+\ifans{
+	Let $q = A \mu_a + A \mu_b$ as above with $A=\beta^{-1/4}$. As before, $\langle q^Tk_i \rangle = q^T\mu_i$ for all $i$, but variance
+	$$
+		\operatorname{Var} (q^Tk_a) =q^T(\beta I + \frac{1}{2}\mu_a\mu_a^T)q =2A^2\beta + \frac{1}{2}A^2 \approx \frac{1}{2}A^2.
+	$$
+	This varaince is large because we want $A$ to be large by construction. Variance for other logits is $2A^2\beta  \ll 1$ as before. Because softmax funciton expontiates its arguments, variance is apliefied, and can become huge, which means that value of $\exp(q^Tk_a)$ fluctuates a lot. Now we are not guranted that $c \approx \frac{1}{2}(v_a +v_b)$, coefficient $\alpha_a$ can be much larger or much smaller than $\alpha_b$ (while $\alpha_b$ is always larger then other contributions). 
+	
+	Hence we can have situations when $c \approx v_a$ or $c \approx v_b$.
+}
 \end{subparts}
 
 \part[3] \textbf{Benefits of multi-headed attention:}
@@ -92,16 +122,21 @@ Also as before, assume that the means $\mu_i$ are mutually orthogonal; $\mu_i^\t
 Assume that the covariance matrices are $\Sigma_i=\alpha I$, for vanishingly small $\alpha$.
 Design $q_1$ and $q_2$ in terms of $\mu_i$ such that $c$ is approximately equal to $\frac{1}{2}(v_a+v_b)$. 
 Note that $q_1$ and $q_2$ should have different expressions.
-\ifans{}
+\ifans{
+	We can set $q_1 = \mu_a$ and $q_2 = \mu_b$. Then in one head will get $c_1 = v_a$ and in another $c_2 = v_b$. Argumentation is the same as in part c(i).
+}
 
 \subpart[2]
 Assume that the covariance matrices are $\Sigma_a=\alpha I + \frac{1}{2}(\mu_a\mu_a^\top)$ for vanishingly small $\alpha$, and $\Sigma_i=\alpha I$  for all $i \neq a$.
 Take the query vectors $q_1$ and $q_2$ that you designed in part i.
 What, qualitatively, do you expect the output $c$ to look like across different samples of the key vectors? Explain briefly in terms of variance in $c_1$ and $c2$. You can ignore cases in which $k_a^\top q_i < 0$. 
 
-\ifans{}
+\ifans{
+	Now once again variance of $c_1$ is large, but for majority cases $\alpha_a$ is going to be larger then other weights $\alpha_i$ because $q_1^Tk_a \sim A$ and $\sigma(q_1^Tk_a) \approx \frac{1}{\sqrt{2}}A$, hence probability that $q_1^Tk_a < 0$ is only 2\%. With overwhelming probability we'll have $c_1 \approx v_a$.
+}
 
 \end{subparts}
 
 
 \end{parts}
+
