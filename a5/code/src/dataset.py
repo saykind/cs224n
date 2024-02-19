@@ -167,8 +167,43 @@ class CharCorruptionDataset(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        # TODO [part e]: see spec above
-        raise NotImplementedError
+        """
+                The __getitem__ function takes an index and returns a data point (x, y) where
+        x and y are Long tensors of length self.block_size. x encodes the input
+        sequence, and y encodes the output sequence.
+        """
+
+        # Use the idx argument of __getitem__ to retrieve the element of self.data at the given index.
+        document = self.data[idx]
+
+        # Randomly truncate the document to a length no less than 4 characters, and no more than int(self.block_size*7/8) characters.
+        truncation_length = random.randint(4, int(self.block_size*7/8))
+        document = document[:truncation_length]
+
+        # Now, break the (truncated) document into three substrings: [prefix] [masked_content] [suffix]
+        masked_content_length = random.randint(1, truncation_length//2)
+        masked_content_start = random.randint(1, truncation_length-masked_content_length-1)
+        masked_content_end = masked_content_start + masked_content_length
+ 
+        prefix = document[:masked_content_start]
+        masked_content = document[masked_content_start:masked_content_end]
+        suffix = document[masked_content_end:]
+
+        # Rearrange these substrings into the following form: [prefix] MASK_CHAR [suffix] MASK_CHAR [masked_content] [pads]
+        masked_string = prefix + self.MASK_CHAR + suffix + self.MASK_CHAR + masked_content
+        masked_string = masked_string + self.PAD_CHAR*(self.block_size - len(masked_string))
+
+        # We now use masked_string to construct the input and output example pair. To do so, simply take the input string to be masked_string[:-1], and the output string to be masked_string[1:].
+        x = masked_string[:-1]
+        y = masked_string[1:]
+
+        # Making use of the vocabulary that you defined, encode the resulting input and output strings as Long tensors and return the resulting data point.
+        x = torch.tensor([self.stoi[c] for c in x], dtype=torch.long)
+        y = torch.tensor([self.stoi[c] for c in y], dtype=torch.long)
+
+        return x, y
+    
+    
 
 """
 Code under here is strictly for your debugging purposes; feel free to modify

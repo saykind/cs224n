@@ -80,7 +80,6 @@ elif args.variant == 'perceiver':
     model = model.GPT(mconf)
     model.to(device)
 
-    
 else:
     raise ValueError("Unknown model variant")
 
@@ -107,7 +106,29 @@ if args.function == 'pretrain':
     # final_tokens=200*len(pretrain_dataset)*block_size
     # num_workers=4
     # writer=writer 
-    raise NotImplementedError
+
+    assert args.pretrain_corpus_path is not None
+    # Open the corpus
+    pretrain_text = open(args.pretrain_corpus_path, encoding='utf-8').read()
+    # Create a dataset
+    pretrain_dataset = dataset.CharCorruptionDataset(pretrain_text, block_size)
+    # Initialize the trainer
+    tconf = trainer.TrainerConfig(max_epochs=650,
+                                    batch_size=128,
+                                    learning_rate=args.pretrain_lr,
+                                    lr_decay=True,
+                                    warmup_tokens=512*20,
+                                    final_tokens=200*len(pretrain_dataset)*block_size,
+                                    num_workers=0,
+                                    writer=writer)
+    trainer = trainer.Trainer(model, pretrain_dataset, None, tconf)
+    # Train the model
+    trainer.train()
+    
+    # Save the resulting model in args.writing_params_path
+    torch.save(model.state_dict(), args.writing_params_path)
+
+
 elif args.function == 'finetune':
     assert args.writing_params_path is not None
     assert args.finetune_corpus_path is not None
@@ -147,20 +168,32 @@ elif args.function == 'finetune':
     if args.reading_params_path is not None:
         model.load_state_dict(torch.load(args.reading_params_path))
 
-    # Finetune the model on args.finetune_corpus_path 
+    # Open the corpus
     finetune_text = open(args.finetune_corpus_path, encoding='utf-8').read()
+    # Create a dataset
     finetune_dataset = dataset.NameDataset(pretrain_dataset, finetune_text)
     
     # Initialize the trainer
-    tconf = trainer.TrainerConfig(max_epochs=75, 
-                                  batch_size=256, 
-                                  learning_rate=args.finetune_lr, 
-                                  lr_decay=True, 
-                                  warmup_tokens=512*20, 
-                                  final_tokens=200*len(pretrain_dataset)*block_size, 
-                                  num_workers=0, 
-                                  writer=writer)
+    if args.pretrain_corpus_path is not None:
+        tconf = trainer.TrainerConfig(max_epochs=10, 
+                                      batch_size=256, 
+                                      learning_rate=args.finetune_lr, 
+                                      lr_decay=True, 
+                                      warmup_tokens=512*20, 
+                                      final_tokens=200*len(pretrain_dataset)*block_size, 
+                                      num_workers=0, 
+                                      writer=writer)
+    else:
+        tconf = trainer.TrainerConfig(max_epochs=75, 
+                                    batch_size=256, 
+                                    learning_rate=args.finetune_lr, 
+                                    lr_decay=True, 
+                                    warmup_tokens=512*20, 
+                                    final_tokens=200*len(pretrain_dataset)*block_size, 
+                                    num_workers=0, 
+                                    writer=writer)
     trainer = trainer.Trainer(model, finetune_dataset, None, tconf)
+    # Train the model
     trainer.train()
     
 
