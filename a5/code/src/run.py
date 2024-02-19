@@ -1,5 +1,3 @@
-#import os
-#os.environ['KMP_DUPLICATE_LIB_OK']='True'
 import numpy as np
 import torch
 import torch.nn as nn
@@ -160,10 +158,9 @@ elif args.function == 'finetune':
                                   lr_decay=True, 
                                   warmup_tokens=512*20, 
                                   final_tokens=200*len(pretrain_dataset)*block_size, 
-                                  num_workers=4, 
+                                  num_workers=0, 
                                   writer=writer)
-    trainer = trainer.Trainer(model, finetune_dataset, None, tconf, device)
-    print('device = {trainer.device}')
+    trainer = trainer.Trainer(model, finetune_dataset, None, tconf)
     trainer.train()
     
 
