@@ -1,7 +1,5 @@
 % !TeX root = main.tex
 
-\graphicspath{ {images/} }
-
 \titledquestion{Attention exploration}[20]
 \label{sec:analysis}
 
@@ -52,8 +50,8 @@ Additionally, suppose that the two subspaces are orthogonal; i.e. $a_j^\top b_k 
 Indeed, $Mv_b = 0$ because $v_b$ is a linear combination of $\{ b_i \}$ and $a$--basis vectors are orthogonal to $b$--basis vectors. Also, $Mv_a = v_a$ because $a_i \otimes a_i^T a_j = a_j \delta_{ij}$, where $\delta$ is \href{https://en.wikipedia.org/wiki/Kronecker_delta}{Kronecker $\delta$--symbol}. Hence $M(v_a + v_b) = v_a$.}
 
 \subpart[4] As before, let $v_a$ and $v_b$ be two value vectors corresponding to key vectors $k_a$ and $k_b$, respectively.
-Assume that (1) all key vectors are orthogonal, so $k_i^\top k_j = 0$ for all $i \neq j$; and (2) all key vectors have norm $1$.\footnote{Recall that a vector $x$ has norm 1 iff $x^\top x = 1$.}
-\textbf{Find an expression} for a query vector $q$ such that $c \approx \frac{1}{2}(v_a + v_b)$, and justify your answer.\footnote{Hint: while the softmax function will never \textit{exactly} average the two vectors, you can get close by using a large scalar multiple in the expression.} (Recall what you learned in part~(\ref{copying}).)
+Assume that (1) all key vectors are orthogonal, so $k_i^\top k_j = 0$ for all $i \neq j$; and (2) all key vectors have norm $1$.
+\textbf{Find an expression} for a query vector $q$ such that $c \approx \frac{1}{2}(v_a + v_b)$, and justify your answer.
 
 \ifans{When $q = A( k_a+  k_b )$ then $q^Tk_j = 0$ for any $j \neq a$, $b$. Also, $q^Tk_a = q^Tk_b = A$. If we choose large scalar $A \gg 1$, it would lead to $c \approx \frac{1}{2}(v_a + v_b)$.}
 \end{subparts}

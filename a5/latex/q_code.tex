@@ -1,4 +1,4 @@
-\graphicspath{ {images/} }
+% !TeX root = main.tex
 
 \newcommand{\Real}{\mathbb{R}}
 \newcommand{\Int}{\mathbb{Z}}
@@ -100,7 +100,11 @@ python src/run.py evaluate vanilla wiki.txt  \
 
 Training will take less than 10 minutes (on GCP).  Report your model's accuracy on the dev set (as printed by the second command above). Similar to assignment 4, we also have Tensorboard logging in assignment 5 for debugging. It can be launched using \texttt{tensorboard --logdir expt/}.  Don't be surprised if it is well below 10\%; we will be digging into why in Part 3. As a reference point, we want to also calculate the accuracy the model would have achieved if it had just predicted ``London'' as the birth place for everyone in the dev set. Fill in \texttt{london\_baseline.py} to calculate the accuracy of that approach and report your result in your write-up. You should be able to leverage existing code such that the file is only a few lines long. 
 
-\ifans{}
+\ifans{
+	Fine--tunnning only (no pre--training).\\
+	Dev accuracy: 1.4\%\\ 
+	London baseline: 5\%.
+	}
 
 \part[10]\textbf{Define a \textit{span corruption} function for pretraining.}\\
 In the file \texttt{src/dataset.py}, implement the \texttt{\_\_getitem\_\_()} function for the dataset class \\ \texttt{CharCorruptionDataset}.
@@ -150,6 +154,11 @@ python src/run.py evaluate vanilla wiki.txt  \
 \end{lstlisting}
 
 Report the accuracy on the dev set (printed by the third command above). We expect the dev accuracy will be at least 10\%, and will expect a similar accuracy on the held out test set.
+
+\ifans{
+	Pre--training and fine--tunnning.\\
+	Dev accuracy: 25.2\%.
+	}
 
 \part[10] \textbf{Research! Write and try out a more efficient variant of Attention (Budget 2 hours for pretraining!)}\\
 
@@ -243,7 +252,7 @@ For this section, you'll submit: \texttt{perceiver.finetune.params}, \texttt{per
 
 \subpart[2] Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($L$), input sequence length ($\ell$) and basis bottleneck dimension ($m$). 
 
-\ifans{}
+\ifans{Perceiver (+ fine--tunning) has 13\% accuracy on dev set.}
 
 \end{subparts}
 \end{parts}
