@@ -252,7 +252,11 @@ For this section, you'll submit: \texttt{perceiver.finetune.params}, \texttt{per
 
 \subpart[2] Provide an expression for the time complexity of the Perceiver model and the vanilla model, in terms of number of layers ($L$), input sequence length ($\ell$) and basis bottleneck dimension ($m$). 
 
-\ifans{Perceiver (+ fine--tunning) has 13\% accuracy on dev set.}
+\ifans{
+    i. Perceiver (+ fine--tunning) has 13\% accuracy on dev set. \\
+    ii. Vanilla transformer has complexity $\mathcal{O}(L \cdot \ell^2 \cdot m)$.
+    Perceiver has complexity $\mathcal{O}(L \cdot \ell \cdot m)$.
+}
 
 \end{subparts}
 \end{parts}
@@ -263,21 +267,24 @@ For this section, you'll submit: \texttt{perceiver.finetune.params}, \texttt{per
 
 \part[1] Succinctly explain why the pretrained (vanilla) model was able to achieve an accuracy of above 10\%, whereas the non-pretrained model was not.
 
-\ifans{}
+\ifans{Pretraining process enables the model to understand the basic structure of the language, including syntax, semantics, and common patterns at the character level, even before being fine-tuned on a specific task. Non-pretrained model starts from scratch without any knowledge of the language or task-specific patterns.}
 
 \part[2] Take a look at some of the correct predictions of the pretrain+finetuned vanilla model, as well as some of the errors.
 We think you'll find that it's impossible to tell, just looking at the output, whether the model \textit{retrieved} the correct birth place, or \textit{made up} an incorrect birth place.
 Consider the implications of this for user-facing systems that involve pretrained NLP components.
 Come up with two \textbf{distinct} reasons why this model behavior (i.e. unable to tell whether it's retrieved or made up) may cause concern for such applications, and an example for each reason.
 
-\ifans{}
+\ifans{One reason, is that such behaviour makes it hard to interpret and improve/debug such model. Another reason, is that using such model can lead to controversial results, where model could hallucinate and provide misinformation. This can be approached by e.g. adding confidence score to the output or having additional utility which fact checks the information.}
 
 \part[2] If your model didn't see a person's name at pretraining time, and that person was not seen at fine-tuning time either, it is not possible for it to have ``learned'' where they lived.
 Yet, your model will produce \textit{something} as a predicted birth place for that person's name if asked.
 Concisely describe a strategy your model might take for predicting a birth place for that person's name, and one reason why this should cause concern for the use of such applications.\\
 (While 3b discussed the problems that could arise from made up predictions, 3c asks for a mechanism the model could be using for generating birth places of people not seen at fine-tuning time and why such a mechanism could be problematic.)
 
-\ifans{}
+\ifans{
+    Its strategy probably relies on involve inferring from patterns or associations it learned during pre--training. For example, the model might associate certain name patterns, suffixes, or phonetic similarities with geographic locations it encountered during pretraining. 
+    This is concerning because such approach can inadvertently reinforce stereotypes and biases.
+}
 
 \end{parts}
 
