@@ -16,7 +16,7 @@ import utils
 
 argp = argparse.ArgumentParser()
 argp.add_argument('function', help="Choose pretrain, finetune, or evaluate")
-argp.add_argument('variant', help="Choose vanilla or perceiver") 
+argp.add_argument('variant', help="Choose vanilla or perceiver or bilinear.") 
 argp.add_argument('--bottleneck_dim', type=int, default=32)
 argp.add_argument('pretrain_corpus_path', default=None)
 argp.add_argument('--reading_params_path',default=None)
@@ -68,6 +68,14 @@ if args.variant == 'vanilla':
     # [part c] Make the vanilla model here
 
     # construct a GPT model
+    model = model.GPT(mconf)
+    model.to(device)
+
+if args.variant == 'bilinear':
+    # [part c] Make the vanilla model here
+
+    # construct a GPT model
+    mconf.bilinear = True
     model = model.GPT(mconf)
     model.to(device)
 

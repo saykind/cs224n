@@ -32,6 +32,7 @@ class GPTConfig:
     resid_pdrop = 0.1
     attn_pdrop = 0.1
     perceiver = False
+    bilinear = False
     bottleneck_dim = None
 
     def __init__(self, vocab_size, block_size, **kwargs):
@@ -56,6 +57,27 @@ class Block(nn.Module):
         self.ln1 = nn.LayerNorm(config.n_embd)
         self.ln2 = nn.LayerNorm(config.n_embd)
         self.attn = attention.CausalSelfAttention(config)
+        self.mlp = nn.Sequential(
+            nn.Linear(config.n_embd, 4 * config.n_embd),
+            nn.GELU(),
+            nn.Linear(4 * config.n_embd, config.n_embd),
+            nn.Dropout(config.resid_pdrop),
+        )
+
+    def forward(self, x):
+        x = x + self.attn(self.ln1(x))
+        x = x + self.mlp(self.ln2(x))
+        return x
+
+
+class BilinearBlock(nn.Module):
+    """ Bilinear attention Transformer block """
+
+    def __init__(self, config):
+        super().__init__()
+        self.ln1 = nn.LayerNorm(config.n_embd)
+        self.ln2 = nn.LayerNorm(config.n_embd)
+        self.attn = attention.BilinearSelfAttention(config)
         self.mlp = nn.Sequential(
             nn.Linear(config.n_embd, 4 * config.n_embd),
             nn.GELU(),
@@ -155,6 +177,7 @@ class GPT(nn.Module):
         self.drop = nn.Dropout(config.embd_pdrop)
         # transformer
         self.perceiver = config.perceiver
+        self.bilinear = config.bilinear
         if config.perceiver:            
             input_block_size = config.block_size
             
@@ -168,8 +191,10 @@ class GPT(nn.Module):
             # reset value of the block size back to the original.
             config.block_size = input_block_size
             self.up_block = UpProjectBlock(config)
-            
-            
+
+        elif config.bilinear:
+            self.blocks = nn.Sequential(*[BilinearBlock(config) for _ in range(config.n_layer)])
+
         else:
             self.blocks = nn.Sequential(*[Block(config) for _ in range(config.n_layer)])
         # decoder head
@@ -182,7 +207,7 @@ class GPT(nn.Module):
         print("number of parameters: {}".format(sum(p.numel() for p in self.parameters())))
 
     def _init_weights(self, module):
-        if isinstance(module, (nn.Linear, nn.Embedding)):
+        if isinstance(module, (nn.Linear, nn.Embedding, nn.Bilinear)):
             module.weight.data.normal_(mean=0.0, std=0.02)
             if isinstance(module, nn.Linear) and module.bias is not None:
                 module.bias.data.zero_()
